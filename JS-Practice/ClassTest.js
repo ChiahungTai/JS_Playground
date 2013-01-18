@@ -55,8 +55,8 @@ var Coin = enumeration({
 });
 var c = Coin.Dime; // This is an instance of the new class
 print(c instanceof Coin); // => true: instanceof works
-c.constructor == Coin; // => true: constructor property works
-Coin.Quarter + 3 * Coin.Nickel; // => 40: values convert to numbers
-Coin.Dime == 10; // => true: more conversion to numbers
-Coin.Dime > Coin.Nickel; // => true: relational operators work
-String(Coin.Dime) + ":" + Coin.Dime; // => "Dime:10": coerce to string
+print(c.constructor == Coin); // => true: constructor property works
+print(Coin.Quarter + 3 * Coin.Nickel); // => 40: values convert to numbers
+print(Coin.Dime == 10); // => true: more conversion to numbers
+print(Coin.Dime > Coin.Nickel); // => true: relational operators work
+print(String(Coin.Dime) + ":" + Coin.Dime); // => "Dime:10": coerce to string
