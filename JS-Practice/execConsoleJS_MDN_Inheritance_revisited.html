@@ -9,7 +9,8 @@
 		<h1>Inheritance revisited</h1>
 
 		<p>
-			This test-case is intended for <b>Inheritance revisited</b> introduced in <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Inheritance_Revisited"> MDN - Inheritance revisited</a>.
+			This test-case is intended for <b>Inheritance revisited</b>
+			introduced in <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Inheritance_Revisited"> MDN - Inheritance revisited</a>.
 		</p>
 
 		<ol>
@@ -35,11 +36,10 @@
 		<script type="text/javascript">
 			function onExecuteTest() {
 				// TODO: Usage of the console object e.g.
-				function A(a) {
+				function A(a, d) {
 					this.varA = a;
+					this.varD = d;
 				}
-
-
 				A.prototype = {
 					varA : null,
 					doSomething : function() {
@@ -50,9 +50,8 @@
 				function B(a, b) {
 					A.call(this, a);
 					this.varB = b;
+					this.method = "GET";
 				}
-
-
 				B.prototype = Object.create(A.prototype, {
 					varB : {
 						value : null,
@@ -72,10 +71,44 @@
 					}
 				});
 
-				var b = new B();
+				function C(a, c) {
+					A.call(this, a, c);
+					 this.varC = c;
+					this.method = "POST";
+				}
+				C.prototype = Object.create(A.prototype, {
+					varC : {
+						value : null,
+						enumerable : true,
+						configurable : true,
+						writable : true
+					},
+					doSomething : {
+						value : function() {// override
+							A.prototype.doSomething.apply(this, arguments);
+							// call super
+							// ...
+						},
+						enumerable : true,
+						configurable : true,
+						writable : true
+					}
+				});
+
+				var a = new A("a", "d");
+				a.doSomething();
+				console.log("a = " + JSON.stringify(a));
+				console.dir(a);
+
+				var b = new B("a", "b");
 				b.doSomething();
 				console.log("b = " + JSON.stringify(b));
 				console.dir(b);
+
+				var c = new C("a", "c");
+				c.doSomething();
+				console.log("c = " + JSON.stringify(c));
+				console.dir(c);
 			}
 		</script>
 
