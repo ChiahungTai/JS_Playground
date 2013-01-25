@@ -35,16 +35,20 @@
 
 		<script type="text/javascript">
 			function onExecuteTest() {
-				// TODO: Usage of the console object e.g.
 				function A(a, d) {
 					this.varA = a;
 					this.varD = d;
 				}
 				A.prototype = {
+					//varA and varD will be modfified by constructor
 					varA : null,
+					varD : "I am default",
 					doSomething : function() {
-						// ...
-					}
+						console.log("a.doSomething");
+						console.log("varD = " + this.varD);
+					},
+					//varStatic is kind of static class member
+					varStatic : "I am static class member"
 				}
 
 				function B(a, b) {
@@ -53,6 +57,7 @@
 					this.method = "GET";
 				}
 				B.prototype = Object.create(A.prototype, {
+					// It look like we should write in this way...
 					varB : {
 						value : null,
 						enumerable : true,
@@ -63,17 +68,17 @@
 						value : function() {// override
 							A.prototype.doSomething.apply(this, arguments);
 							// call super
-							// ...
+							console.log("b.doSomething");
 						},
 						enumerable : true,
 						configurable : true,
 						writable : true
-					}
+					},
 				});
 
 				function C(a, c) {
 					A.call(this, a, c);
-					 this.varC = c;
+					this.varC = c;
 					this.method = "POST";
 				}
 				C.prototype = Object.create(A.prototype, {
@@ -87,7 +92,7 @@
 						value : function() {// override
 							A.prototype.doSomething.apply(this, arguments);
 							// call super
-							// ...
+							console.log("c.doSomething");
 						},
 						enumerable : true,
 						configurable : true,
@@ -95,11 +100,30 @@
 					}
 				});
 
-				var a = new A("a", "d");
+				var a = new A("a", "GG");
 				a.doSomething();
+				console.log("a = " + JSON.stringify(a));
+				// You can see we modified the varA and varD but keep the
+				//   varStatic the same as A.prototype.varStatic. 
+				console.dir(a);
+				console.log("a.varStatic = " + a.varStatic);
+				// Because the varStatic is copied to object instance, so change
+				//   a.varStatic will not influent A.prototype.varStatic
+				a.varStatic = "Change it";
+				a.varD = "New D";
+				console.log("a.varStatic = " + a.varStatic);
+				// Change the A.prototype.varStatic to see what happen to the
+				//   object instances.
+				A.prototype.varStatic = "New one";
+				var a1 = new A("a1");
+				console.log("a1.varStatic = " + a1.varStatic);
+				console.log("a1 = " + JSON.stringify(a));
+				console.dir(a1);
 				console.log("a = " + JSON.stringify(a));
 				console.dir(a);
 
+				// Test the inherited object instance.....
+				// To see what we have in it.
 				var b = new B("a", "b");
 				b.doSomething();
 				console.log("b = " + JSON.stringify(b));
