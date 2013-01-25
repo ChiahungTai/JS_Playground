@@ -40,14 +40,14 @@
 					this.varD = d;
 				}
 				A.prototype = {
-					//varA and varD will be modfified by constructor
+					// varA and varD will be modified by constructor
 					varA : null,
 					varD : "I am default",
 					doSomething : function() {
 						console.log("a.doSomething");
 						console.log("varD = " + this.varD);
 					},
-					//varStatic is kind of static class member
+					// varStatic is kind of static class member
 					varStatic : "I am static class member"
 				}
 
@@ -80,6 +80,7 @@
 					A.call(this, a, c);
 					this.varC = c;
 					this.method = "POST";
+					this.headers = {};
 				}
 				C.prototype = Object.create(A.prototype, {
 					varC : {
