@@ -35,6 +35,83 @@
 		<script type="text/javascript">
 			function onExecuteTest() {
 
+				var o = {
+					m: function() {
+						var self = this;
+						console.log(this === o);
+						f();
+						
+						function f() {
+							console.log(this === o);
+							console.log(self === o);
+						}
+					}
+				};
+				o.m();
+				
+				var factorial_var = function (x) {
+					if (x < 1) return 1;
+					return x * arguments.callee(x-1);
+				}
+				console.log("10! = " + factorial_var(10));
+				// Defining Your Own Function Properties
+				function factorial(n) {
+					if (isFinite(n) && n > 0 && n == Math.round(n)) {
+						if(!(n in factorial)) {
+							factorial[n] = n * factorial(n-1);
+						}
+						return factorial[n];
+					} else {
+						return NaN;
+					}
+				}
+				factorial[1] = 1;
+				console.log("10! = " + factorial(10));
+				
+
+				// Functions As Namespaces
+				// Define an extend function that copies the properties of its second and
+				// subsequent arguments onto its first argument.
+				// We work around an IE bug here: in many versions of IE, the for/in loop
+				// won't enumerate an enumerable property of o if the prototype of o has
+				// a nonenumerable property by the same name. This means that properties
+				// like toString are not handled correctly unless we explicitly check for them.
+				var extend = (function() { // Assign the return value of this function
+					// First check for the presence of the bug before patching it.
+					for(var p in {toString:null}) {
+						// If we get here, then the for/in loop works correctly and we return
+						// a simple version of the extend() function
+						return function extend(o) {
+							for(var i = 1; i < arguments.length; ++i) {
+								var source = arguments[i];
+								for(var pop in source) o[prop] = source[prop];
+							}
+							return o;
+						};
+					}
+					// If we get here, it means that the for/in loop did not enumerate
+					// the toString property of the test object. So return a version
+					// of the extend() function that explicitly tests for the nonenumerable
+					// properties of Object.prototype.
+					return function patched() {
+						for(var i = 1; i < arguments.length; ++i) {
+							var source = arguments[i];
+							//Copy all the enumerable properties.
+							for (var prop in source) o[prop] = source[prop];
+							
+							// And now check the special-case properties
+							for (var j = 0; j < protoprops.length; j++) {
+								prop = protoprops[j];
+								if (source.hasOwnedProperty(prop))
+									o[prpo] = source[prop];
+							}
+						}
+						return o;
+					};
+					// This is the list of special-case properties we check for
+					var protoprops = ["toString", "valueOf", "constructor", "hasOwnProperty",
+						"isPrototypeOf", "propertyIsEnumerable","toLocaleString"];
+				}());
 			}
 		</script>
 
