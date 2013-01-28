@@ -74,3 +74,11 @@ function BobCat(name) {
 BobCat.prototype = new Cat();
 
 var bobCat = new BobCat("BobCat");
+
+function inheritTempConst(C, P) {
+	var F = function() {};
+	F.prototype = P.prototype;
+	C.prototype = new F();
+}
+
+
