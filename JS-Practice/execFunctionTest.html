@@ -35,6 +35,17 @@
 		<script type="text/javascript">
 			function onExecuteTest() {
 
+				var callback = function callback() {
+					console.log("I am callback");
+				};
+				var testFunc = function testFunc(callback) {
+					console.log("test");
+					callback.call(this);
+					if(callback)
+						console.log("callback is not null");
+				};
+				testFunc(callback.bind(this));
+
 				var o = {
 					m: function() {
 						var self = this;
